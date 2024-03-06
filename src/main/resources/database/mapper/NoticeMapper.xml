@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.winter.app.board.notice.NoticeDAO">
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.winter.app.board.notice.NoticeDAO">
+  
   <select id="getList" resultType="NoticeVO">
-  	SELECT * FROM NOTICE ORDER BY BOARD_NUM DESC
+  
+  SELECT * FROM NOTICE 
+  WHERE BOARDCONTENTS LIKE CONCAT('%', '3', '%')
+  ORDER BY BOARDNUM DESC
+  LIMIT 0,10
+  
   </select>
   
   <insert id="add" parameterType="BoardVO">
-  	INSERT INTO NOTICE (BOARD_NUM,BOARD_WRITER,BOARD_CONTENTS,BOARD_DATE,BOARD_HIT)
-  	VALUES (NULL,#{board_Writer},#{board_Title},#{board_Contents},now(),0)
+  INSERT INTO NOTICE
+  (BOARDWRITER, BOARDCONTENTS, BOARDDATE, BOARDHITS, BOARDTITLE )
+  VALUES
+  (#{boardWriter},#{boardContents}, now(), 0, #{boardTitle})
   </insert>
-</mapper>
+  </mapper>
