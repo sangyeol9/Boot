@@ -2,22 +2,39 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
   <mapper namespace="com.winter.app.board.notice.NoticeDAO">
-  
-  <select id="getList" resultType="NoticeVO">
-  
-  SELECT * FROM NOTICE 
-  WHERE BOARDCONTENTS LIKE CONCAT('%', '3', '%')
-  ORDER BY BOARDNUM DESC
-  LIMIT 0,10
-  
-  </select>
-  
-  <insert id="add" parameterType="BoardVO">
-  INSERT INTO NOTICE
-  (BOARDWRITER, BOARDCONTENTS, BOARDDATE, BOARDHITS, BOARDTITLE )
-  VALUES
-  (#{boardWriter},#{boardContents}, now(), 0, #{boardTitle})
-  </insert>
+  	<sql id="search">
+  		<where>
+  		<choose>
+  			<when test="kind=='kind1'">BOARDTITLE</when>
+  			<when test="kind=='kind2'">BOARDCONTENTS</when>
+  			<otherwise>BOARDWRITER</otherwise>
+  		</choose>  
+  		LIKE CONCAT('%', #{search}, '%')
+  		</where> 		
+  	</sql>
+  	
+  	<select id="getTotalCount" resultType="Long" parameterType="Pager">
+  		SELECT COUNT(BOARDNUM) FROM NOTICE
+ 
+  		<include refid="search"></include>
+  		
+  	</select>
+  	
+  	<select id="getList" resultType="NoticeVO" parameterType="Pager">
+  		
+  		SELECT * FROM NOTICE 
+  		
+  		<include refid="search"></include>
+  		
+  		ORDER BY BOARDNUM DESC
+  		LIMIT #{startIndex}, #{perPage}
+  	</select>
+  	
+  	<insert id="add" parameterType="BoardVO">
+  		INSERT INTO NOTICE 
+  		(BOARDWRITER, BOARDTITLE, BOARDCONTENTS, BOARDDATE, BOARDHIT)
+  		VALUES
+  		(#{boardWriter}, #{boardTitle}, #{boardContents}, now(), 0)
+  	</insert>
   </mapper>

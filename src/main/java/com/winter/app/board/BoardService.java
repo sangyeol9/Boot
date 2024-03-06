@@ -2,17 +2,12 @@ package com.winter.app.board;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.winter.app.util.Pager;
 
-
-public interface BoardDAO {
-
+public interface BoardService {
+	
 	public List<BoardVO> getList(Pager pager)throws Exception;					
 	
 	public int add(BoardVO boardVO) throws Exception;
-	
-	public Long getTotalCount(Pager pager) throws Exception;
 	
 }
