@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.winter.app.board.BoardDAO;
 
 @Mapper
-public interface NoticeDAO extends BoardDAO{
+public interface NoticeDAO extends BoardDAO {
+	
 
 }

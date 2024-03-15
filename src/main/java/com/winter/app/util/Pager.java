@@ -2,27 +2,40 @@ package com.winter.app.util;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
+@ToString
 public class Pager {
-
-	private Long page; // 현재 페이지 번호
-	private Long perPage; // 한 페이지당 출력 개수
+	
+	private Long page;//페이지 번호
+	private Long perPage; //한페이지당 출력 갯수
+	
 	private Long startIndex;
 	
-	private Long totalPage;
 	
+	private Long totalPage;
+	private Long startNum;
+	private Long lastNum;
 	
 	//이전 블럭이 없으면 true;
 	private boolean start;
 	//다음 블럭이 없으면 true;
 	private boolean last;
-	private Long startNum;
-	private Long lastNum;
 	
+	//검색 관련
 	private String search;
 	private String kind;
+	
+	
+	public void makeIndex() {
+		//1 0
+		//2 10
+		//3 20
+		this.startIndex= (this.getPage()-1)*this.getPage();
+		
+	}
 	
 	public void makeNum(Long totalCount) {
 		if(totalCount<1) {
@@ -71,23 +84,30 @@ public class Pager {
 			this.setLast(true);
 		}
 	}
-	public void makeIndex() {
-		this.startIndex = (this.getPage()-1) *this.getPerPage();
-	}
+
 	
+	//Getter
+	//public 리턴타입 get멤버변수명(){}
 	public Long getPage() {
-		if(this.page == null || this.page<1) this.page = 1L;
+		if(this.page==null || this.page<1) {
+			this.page=1L;
+		}
 		return this.page;
 	}
 	
 	public Long getPerPage() {
-		if(this.perPage == null || this.perPage<1) this.perPage =10L;
+		if(this.perPage==null || this.perPage<1) {
+			this.perPage=10L;
+		}
 		return this.perPage;
 	}
 	
 	public String getSearch() {
-		if(this.search ==null) this.search="";
+		if(this.search==null) {
+			this.search="";
+		}
+		
 		return this.search;
 	}
-	
+
 }

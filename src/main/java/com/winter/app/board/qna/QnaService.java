@@ -1,12 +1,10 @@
-package com.winter.app.board.notice;
+package com.winter.app.board.qna;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.winter.app.board.BoardDAO;
@@ -20,12 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Transactional(rollbackFor = Exception.class)
-public class NoticeService implements BoardService {
+public class QnaService implements BoardService {
 	
 	@Autowired
-	private NoticeDAO noticeDAO;
-	@Value("${app.upload.board.notice}")
+	private QnaDAO qnaDAO;
+	@Value("${app.upload.board.qna}")
 	private String uploadPath;
 	@Autowired
 	private FileManager fileManager;
@@ -33,14 +30,16 @@ public class NoticeService implements BoardService {
 	@Override
 	public List<BoardVO> getList(Pager pager) throws Exception {
 		pager.makeIndex();
-		pager.makeNum(noticeDAO.getTotalCount(pager));
+		pager.makeNum(qnaDAO.getTotalCount(pager));
 		
-		return noticeDAO.getList(pager);
+		return qnaDAO.getList(pager);
 	}
 
 	@Override
 	public int add(BoardVO boardVO, MultipartFile [] attach) throws Exception {
-		int result = noticeDAO.add(boardVO);
+		int result = qnaDAO.add(boardVO);
+		//ref를 업데이트
+		result = qnaDAO.refUpdate(boardVO);
 		
 		for(MultipartFile multipartFile:attach) {
 			if(multipartFile.isEmpty()) {
@@ -53,12 +52,7 @@ public class NoticeService implements BoardService {
 			fileVO.setFileName(fileName);
 			fileVO.setOriName(multipartFile.getOriginalFilename());
 			
-			result = noticeDAO.addFile(fileVO);
-			
-			if(result==0) {
-				throw new SQLException();
-			}
-			
+			result = qnaDAO.addFile(fileVO);
 		}
 		
 		return result;
@@ -67,15 +61,14 @@ public class NoticeService implements BoardService {
 	@Override
 	public BoardVO getDetail(BoardVO boardVO) throws Exception {
 		// TODO Auto-generated method stub
-		return noticeDAO.getDetail(boardVO);
+		return qnaDAO.getDetail(boardVO);
 	}
 	
 	@Override
 	public FileVO getFileDetail(FileVO fileVO) throws Exception {
 		// TODO Auto-generated method stub
-		return noticeDAO.getFileDetail(fileVO);
+		return null;
 	}
-	
 	
 
 }

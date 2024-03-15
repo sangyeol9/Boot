@@ -1,12 +1,14 @@
 package com.winter.app.board;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 //@Data
 //@AllArgsConstructor
 //@NoArgsConstructor
@@ -19,5 +21,10 @@ public class BoardVO {
 	private String boardTitle;
 	private String boardContents;
 	private Date boardDate;
-	private Long boardHits;
+	private Long boardHit;
+	
+	private List<FileVO> fileVOs;
+	
+	
+
 }
